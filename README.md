@@ -3,7 +3,7 @@
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Xcov19/project-healthcare)
 [<img src="https://substackcdn.com/image/fetch/w_96,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fb16a2fa6-d7dd-4fce-8c1d-2c3c0c63b8a6_435x435.png" alt="Newsletter" height="32" />](https://xcov19.dev)
  
-_Repo metadata_
+_Repo metadata_ 
 
 [![Staged CI](https://github.com/Xcov19/project-healthcare/workflows/Staged%20CI/badge.svg)](https://github.com/Xcov19/project-healthcare/actions?query=workflow:"Staged+CI")
 [![GitHub tag](https://img.shields.io/github/tag/Xcov19/project-healthcare?include_prereleases=&sort=semver&color=blue)](https://github.com/Xcov19/project-healthcare/releases/)
