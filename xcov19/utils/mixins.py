@@ -49,21 +49,36 @@ class InterfaceProtocolCheckMixin:
         # raise Exception(inspect.getmembers(cls, predicate=inspect.isfunction))
         for defined_method in (
             method_name
-            for method_name, _ in inspect.getmembers(cls, predicate=inspect.ismethod)
+            for method_name, _ in inspect.getmembers(cls, predicate=inspect.isfunction)
             if not method_name.startswith("__")
         ):
-            # TODO: Raise if either classes don't have the method declared.
-            cls_method = getattr(parent_class, defined_method)
+            # Check if method is defined in parent class
+            if not (
+                hasattr(parent_class, defined_method)
+                and (parent_cls_method := getattr(parent_class, defined_method))
+            ):
+                raise NotImplementedError(
+                    f"Method {defined_method} must be implemented in class '{parent_class.__name__}'"
+                )
+
+            # No need to check if subclass method is defined since we are iterating over the subclass methods
             subclass_method = getattr(cls, defined_method)
-            cls_method_params: dict = get_type_hints(cls_method)
+
+            # Parent class implements the method, but subclass does not
+            if parent_cls_method is subclass_method:
+                raise NotImplementedError(
+                    f"Subclass '{cls.__name__}' must override the method '{defined_method}' from the parent class '{parent_class.__name__}'."
+                )
+
+            parent_cls_method_params: dict = get_type_hints(parent_cls_method)
             subclass_method_params: dict = get_type_hints(subclass_method)
-            if len(cls_method_params) != len(subclass_method_params):
+            if len(parent_cls_method_params) != len(subclass_method_params):
                 raise NotImplementedError(f"""Method parameters mismatch:
-                Expected: {cls_method_params.keys()}
+                Expected: {parent_cls_method_params.keys()}
                 Got: {subclass_method_params.keys()}
                 """)
-            for cls_signature, subclass_signature in zip(
-                cls_method_params.items(), subclass_method_params.items()
+            for parent_cls_signature, subclass_signature in zip(
+                parent_cls_method_params.items(), subclass_method_params.items()
             ):
-                match_signature(cls_signature, subclass_signature)
+                match_signature(parent_cls_signature, subclass_signature)
         super().__init_subclass__(**kwargs)
