@@ -30,7 +30,7 @@ By leveraging modern technology, the platform enables patients to easily find ne
 
 <div align="center">
 
-[![view - Documentation](https://img.shields.io/badge/view-Documentation-blue?style=for-the-badge)](https://docs.google.com/document/d/1Y0tr49RHbVprEirFHvkOTIDX_QtiL7rylofZ8pnuYB8/edit?usp=sharing "Go to project documentation")
+[![view - Documentation](https://img.shields.io/badge/view-Documentation-blue?style=for-the-badge)](xcov19\app\docs\Documentation.pdf "Go to project documentation")
 
 </div>
 
@@ -125,9 +125,7 @@ Project Healthcare is an open-source platform designed to provide location-aware
 
 ### Sequence Diagram
 
-Below is the sequence diagram that illustrates the workflow of how the Project Healthcare system works:
-
-![Sequence Diagram](https://github.com/Khan-Ramsha/project-healthcare/blob/main/diagram_image/image.jpg)
+![Sequence Diagram showing interactions between Patient App, Diagnosis API, and Geolocation API, including data flow and service communication](diagram_image\image.jpg)
 
 This diagram shows how different services like **Diagnosis API**, **Geolocation API**, and the **Patient App** interact with each other, as well as the flow of data across the system.
 
