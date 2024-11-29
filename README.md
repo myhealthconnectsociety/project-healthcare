@@ -30,7 +30,7 @@ By leveraging modern technology, the platform enables patients to easily find ne
 
 <div align="center">
 
-[![view - Documentation](https://img.shields.io/badge/view-Documentation-blue?style=for-the-badge)](xcov19\app\docs\Documentation.pdf "Go to project documentation")
+[![view - Documentation](https://img.shields.io/badge/view-Documentation-blue?style=for-the-badge)](xcov19/app/docs/Documentation.pdf "Go to project documentation")
 
 </div>
 
