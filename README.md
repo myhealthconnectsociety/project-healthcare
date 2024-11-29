@@ -125,7 +125,7 @@ Project Healthcare is an open-source platform designed to provide location-aware
 
 ### Sequence Diagram
 
-![Sequence Diagram showing interactions between Patient App, Diagnosis API, and Geolocation API, including data flow and service communication](diagram_image\image.jpg)
+![Sequence Diagram showing interactions between Patient App, Diagnosis API, and Geolocation API, including data flow and service communication](diagram_image/image.jpg)
 
 This diagram shows how different services like **Diagnosis API**, **Geolocation API**, and the **Patient App** interact with each other, as well as the flow of data across the system.
 
