@@ -44,17 +44,17 @@ class InterfaceProtocolCheckMixin:
     interface definition.
     """
 
-    def __init_subclass__(cls, **kwargs):
-        parent_class = inspect.getmro(cls)[1]
+    def __init_subclass__(InterfaceProtocolCheckMixin, **kwargs):
+        parent_class = inspect.getmro(InterfaceProtocolCheckMixin)[1]
         # raise Exception(inspect.getmembers(cls, predicate=inspect.isfunction))
         for defined_method in (
             method_name
-            for method_name, _ in inspect.getmembers(cls, predicate=inspect.ismethod)
+            for method_name, _ in inspect.getmembers(InterfaceProtocolCheckMixin, predicate=inspect.ismethod)
             if not method_name.startswith("__")
         ):
             # TODO: Raise if either classes don't have the method declared.
             cls_method = getattr(parent_class, defined_method)
-            subclass_method = getattr(cls, defined_method)
+            subclass_method = getattr(InterfaceProtocolCheckMixin, defined_method)
             cls_method_params: dict = get_type_hints(cls_method)
             subclass_method_params: dict = get_type_hints(subclass_method)
             if len(cls_method_params) != len(subclass_method_params):
