@@ -11,7 +11,15 @@ from typing import Annotated
 from blacksheep import FromHeader
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+import random
 
+# imported random module to generate random string for secret
+rand=random.choices('abc123j',k=9)
+# The var ' rand ' prints in list 
+string=''
+# Converted from list to text
+for i in rand:
+    string+=i
 
 class APIInfo(BaseModel):
     title: str = "xcov19 API"
@@ -49,4 +57,6 @@ def load_settings() -> Settings:
 
 class FromOriginMatchHeader(FromHeader[str]):
     name = "X-Origin-Match-Header"
-    secret = "secret"
+    secret = string
+    # Printing secret string
+    print(secret) 
