@@ -19,7 +19,7 @@ _Repo metadata_
 
 <div align="center">
 
-[![view - Documentation](https://img.shields.io/badge/view-Documentation-blue?style=for-the-badge)](project-healthcare/documentation/Documentation.pdf "Go to project documentation")
+[![view - Documentation](https://img.shields.io/badge/view-Documentation-blue?style=for-the-badge)](documentation/document.pdf "Go to project documentation")
 
 </div>
 
