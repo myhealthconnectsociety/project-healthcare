@@ -22,6 +22,9 @@ jobs:
     - name: Run Composite Action to Install Packages
       uses: ./.github/actions
 
+    - name: Run Trivy Composite Action
+      uses: ./.github/actions/trivys-action.yml
+
     - name: Run tests
       run: make test
 
