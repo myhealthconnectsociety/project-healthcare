@@ -23,7 +23,7 @@ jobs:
       uses: ./.github/actions
 
     - name: Run Trivy Composite Action
-      uses: ./.github/actions/trivys-action.yml
+      uses: ./.github/actions/trivys
 
     - name: Run tests
       run: make test
