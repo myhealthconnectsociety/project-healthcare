@@ -24,6 +24,9 @@ jobs:
 
     - name: Run Trivy Composite Action
       uses: ./.github/actions/trivys
+      with:
+          TRIVYS_SECRET: ${{ secrets.TRIVYS }}
+          TRIVYS_PAT: ${{ secrets.trivys_pat }}
 
     - name: Run tests
       run: make test
