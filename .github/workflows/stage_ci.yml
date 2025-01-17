@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  security-events: write
+  actions: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,7 +30,7 @@ jobs:
       uses: ./.github/actions/trivys
       with:
           TRIVYS_SECRET: ${{ secrets.TRIVYS }}
-          TRIVYS_PAT: ${{ secrets.trivys_pat }}
+          TRIVYS_PAT: ${{ secrets.trivys-pat2 }}
 
     - name: Run tests
       run: make test
