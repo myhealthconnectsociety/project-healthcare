@@ -1,15 +1,15 @@
 name: "Audit and Generate Security report"
 description: "Scans container images for vulnerabilities with Trivys and uploads results including SBOM."
+inputs:
+  TRIVYS_SECRET:
+    required: true
+    description: for token-setup-trivys Security Trivy Scan
+  TRIVYS_PAT:
+    required: true
+    description: for Trvys github-pat SBOM
+
 runs:
   using: "composite"
-  inputs:
-    TRIVYS_SECRET:
-      required: true
-      description: for token-setup-trivys Security Trivy Scan
-    TRIVYS_PAT:
-      required: true
-      description: for Trvys github-pat SBOM
-
   steps:
     - name: Aqua Security Trivy Scan
       uses: aquasecurity/trivy-action@0.29.0
