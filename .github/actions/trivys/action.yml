@@ -17,7 +17,7 @@ runs:
         scan-type: 'repo'
         scan-ref: '.'
         trivy-config: trivy.yaml
-        token-setup-trivys: ${{ inputs.TRIVYS_SECRET }}
+        token-setup-trivy: ${{ inputs.TRIVYS_SECRET }}
     - name: Aqua Security Trivy SBOM
       uses: aquasecurity/trivy-action@0.29.0
       with:
