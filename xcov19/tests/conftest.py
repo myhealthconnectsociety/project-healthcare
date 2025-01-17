@@ -57,9 +57,9 @@ def dummy_reverse_geo_lookup_svc() -> Callable[[LocationQueryJSON], dict]:
 
 
 @pytest.fixture(scope="class")
-def dummy_patient_query_lookup_svc_none() -> (
-    Callable[[Address, LocationQueryJSON], list]
-):
+def dummy_patient_query_lookup_svc_none() -> Callable[
+    [Address, LocationQueryJSON], list
+]:
     def callback(address: Address, query: LocationQueryJSON) -> list:
         return []
 
