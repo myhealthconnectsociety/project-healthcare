@@ -1,14 +1,5 @@
 name: "Audit and Generate Security report"
 description: "Scans container images for vulnerabilities with Trivys and uploads results including SBOM."
-on:
-  pull_request:
-    types:
-      - opened
-    branches:
-      - main
-  push:
-    branches:
-      - main
 runs:
   using: "composite"
   steps:
