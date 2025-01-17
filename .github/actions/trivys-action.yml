@@ -1,0 +1,34 @@
+name: "Audit and Generate Security report"
+description: "Scans container images for vulnerabilities with Trivys and uploads results including SBOM."
+on:
+  push:
+    branches:
+      - main
+runs:
+  using: "composite"
+  steps:
+    - name: Aqua Security Trivy Scan
+      uses: aquasecurity/trivy-action@0.29.0
+      with:
+        scan-type: 'repo'
+        scan-ref: '.'
+        trivy-config: trivy.yaml
+        token-setup-trivys: ${{ secrets.TRIVYS }}
+    - name: Aqua Security Trivy SBOM
+      uses: aquasecurity/trivy-action@0.29.0
+      with:
+        scan-type: 'fs'
+        format: 'github'
+        output: 'dependency-results.sbom.json'
+        github-pat: ${{ secrets.trivys-pat }}
+    - name: Run Trivy vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+    - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
