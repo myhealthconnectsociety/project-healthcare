@@ -13,7 +13,7 @@ from blacksheep import FromHeader
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-load_env()
+load_dotenv()
 SECRET = os.getenv("SECRET_KEY")
 
 
