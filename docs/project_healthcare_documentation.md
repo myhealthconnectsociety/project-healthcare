@@ -97,7 +97,7 @@ Built on the **BlackSheep** framework, it adheres to domain-driven design and us
 2. Install dependencies
 3. Run the app
 
-Link to the [README.md](project-healthcare/blob/main/README.md)
+Link to the [README.md](https://github.com/Khan-Ramsha/project-healthcare/blob/readme/README.md)
 
 ---
 
