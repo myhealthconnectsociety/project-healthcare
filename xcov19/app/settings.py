@@ -6,11 +6,15 @@ values.
 
 https://docs.pydantic.dev/latest/usage/settings/
 """
-
+import os
+from dotenv import load_dotenv
 from typing import Annotated
 from blacksheep import FromHeader
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+load_env()
+SECRET = os.getenv("SECRET_KEY")
 
 
 class APIInfo(BaseModel):
@@ -49,4 +53,4 @@ def load_settings() -> Settings:
 
 class FromOriginMatchHeader(FromHeader[str]):
     name = "X-Origin-Match-Header"
-    secret = "secret"
+    secret = SECRET
