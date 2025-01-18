@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  security-events: write
+  actions: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,6 +26,12 @@ jobs:
     - name: Run Composite Action to Install Packages
       uses: ./.github/actions
 
+    - name: Run Trivy Composite Action
+      uses: ./.github/actions/trivys
+      with:
+          TRIVYS_SECRET: ${{ secrets.TRIVYS }}
+          TRIVYS_PAT: ${{ secrets.trivys-pat2 }}
+
     - name: Run tests
       run: make test
 
@@ -36,6 +46,6 @@ jobs:
 
       - name: Run Pre-commit
         run: |
-          if [ -f "poetry.lock" ]; then echo "running poetry lock" && poetry lock --no-update; fi;
+          if [ -f "poetry.lock" ]; then echo "running poetry lock" && poetry lock; fi;
           poetry install --no-root --all-extras
           poetry run pre-commit run --all-files;
