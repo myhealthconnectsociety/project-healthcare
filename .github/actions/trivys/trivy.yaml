@@ -1,0 +1,14 @@
+# See: https://trivy.dev/latest/docs/references/configuration/config-file/
+debug: false
+insecure: false
+quiet: false
+dependency-tree: false
+exit-code: 0
+exit-on-eol: 0
+format: "table"
+severity:
+ - UNKNOWN
+ - LOW
+ - MEDIUM
+ - HIGH
+ - CRITICAL
