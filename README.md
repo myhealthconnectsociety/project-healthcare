@@ -1,7 +1,9 @@
-![XCoV19](https://substackcdn.com/image/fetch/w_96,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fb16a2fa6-d7dd-4fce-8c1d-2c3c0c63b8a6_435x435.png)
-
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Xcov19/project-healthcare)
-[<img src="https://substackcdn.com/image/fetch/w_96,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fb16a2fa6-d7dd-4fce-8c1d-2c3c0c63b8a6_435x435.png" alt="Newsletter" height="32" />](https://xcov19.dev)
+<h1>
+  <a href="https://xcov19.dev">
+    Project HealthCare (Xcov19)
+    <img src="https://substackcdn.com/image/fetch/w_96,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fb16a2fa6-d7dd-4fce-8c1d-2c3c0c63b8a6_435x435.png" alt="Newsletter" height="32" />
+  </a>
+</h1>
 
 _Repo metadata_
 
@@ -11,9 +13,18 @@ _Repo metadata_
 [![issues - project-healthcare](https://img.shields.io/github/issues/Xcov19/project-healthcare)](https://github.com/Xcov19/project-healthcare/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/Xcov19/project-healthcare)](https://github.com/Xcov19/project-healthcare/pulls)
 
-## What is it
+  
+## [Getting Started](#getting-started)  |  [Learn the Basics](#learn-the-basics)  |  [Contribute](#contributing)  |  [Supported By](#digitalocean)
+
+
+## What is Project HealthCare?
+Project Healthcare is an open-source platform designed to connect patients with healthcare providers through location-based services. The system helps users find nearby healthcare professionals for consultations, diagnostics, and medical services. It enables seamless interactions by leveraging APIs and location-based technology.
+
 ![xcov19_demo_ezgif-3-0edbb84875](https://github.com/user-attachments/assets/438e2e2c-a40f-49fc-84b0-20037acf22d6)
 
+## Vision
+The Healthcare Project aims to revolutionize access to healthcare by providing a seamless, location-based platform that connects patients with healthcare providers. 
+By leveraging modern technology, the platform enables patients to easily find nearby doctors, book consultations, and access diagnostic services, all while ensuring security, reliability, and ease of use. The goal is to bridge the gap between patients and healthcare professionals, improving the efficiency and quality of care through digital innovation.
 
 ## Documentation
 
@@ -22,7 +33,6 @@ _Repo metadata_
 [![view - Documentation](https://img.shields.io/badge/view-Documentation-blue?style=for-the-badge)](docs/project_healthcare_documentation.md "Go to project documentation")
 
 </div>
-
 
 ## License
 
@@ -68,33 +78,59 @@ Unlike other platforms, HIS combines advanced features in one solution, deliveri
 
 ## Getting started
 
-### For Linux and Mac
+### Prerequisites
+##### Before diving into the Project Healthcare, it's recommended to familiarize yourself with the following technologies and tools:
+- [Python 3.8+](https://www.python.org/)
 
-1. create a Poetry virtual environment using python version in `pyproject.toml`
-2. `poetry install --no-root --with=dev`
-3. Run in development environment: `make run`
+- [Blacksheep Framework](https://www.neoteroi.dev/blacksheep/)
 
-### For IDX
+- [SQL Alchemy](https://www.sqlalchemy.org/)
 
-1. `poetry use env python3.12`
-2. `make run`
+- [Docker](https://www.docker.com/)
 
-### Deploy
+## Installation Steps
+#### For Windows User:
+-  Install [WSL](https://learn.microsoft.com/en-us/windows/wsl/install)  (Windows Subsystem for Linux)
+- Install Ubuntu (or a preferred distribution)
+- After setting up WSL,the remaining steps are the same as for Linux/Mac users.
+#### For Linux and Mac User:
+##### 1) Once you have WSL running with Ubuntu, run `sudo apt install make` in ubuntu terminal
+##### 2) Install Poetry: `curl -sSL https://install.python-poetry.org | python3 - `
+##### 3) Clone the Project by running: `git clone https://github.com/Xcov19/project-healthcare/` `cd project-healthcare`
+##### 4) Install the dependencies using poetry: `poetry install --no-root --with=dev` or run the `install.sh` script
+##### 5) Run the project using `make run` or `./run.sh` to start the application
+## Deploy 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Xcov19/project-healthcare)
 
-To test the instance on render, set the following environment variables:
-
+To test the instance on Render, set the following environment variables:
 ```bash
 PYTHON_VERSION=3.12.4
 PORT=44777
 ```
+## Sandbox for reference
+A reference instance exists on [Render](https://project-healthcare.onrender.com/docs)
 
-### Sandbox for reference
-A reference instance exists on [![Render](https://gist.github.com/cxmeel/0dbc95191f239b631c3874f4ccf114e2/raw/SERVICE-animated.svg)](https://project-healthcare.onrender.com/docs)
+See [Deploy](README.md#deploy) to spin up your own instance.
 
-See [Deploy](#deploy) to spin up your own instance.
+## Learn the Basics
+Project Healthcare is an open-source platform designed to provide location-aware healthcare services. Below is a high-level breakdown:
+
+### Key Components:
+ 
+#### 1) **Diagnosis API** : Captures patient symptoms and fetches relevant healthcare facility data.
+#### 2) **Geolocation API** : Captures the patient's location and suggests nearby facilities.
+#### 3) **Queue System** : Handles request storage, temporary results, and queuing for the diagnosis process.
+#### 4) **Facility Database** : A collection of healthcare facilities and their specialties.
+#### 5) **Patient App** : A front-end that communicates with the APIs to fetch data
+
+### Sequence Diagram
+
+![Sequence Diagram showing interactions between Patient App, Diagnosis API, and Geolocation API, including data flow and service communication](docs/images/sequence-diagram.jpg)
+
+This diagram shows how different services like **Diagnosis API**, **Geolocation API**, and the **Patient App** interact with each other, as well as the flow of data across the system.
 
 ## Contributing
-See [CONTRIBUTING](/CONTRIBUTING.md)
+Please see our [CONTRIBUTING](/CONTRIBUTING.md) for guidelines on how to contribute to the project.
 
 ## Project Management 
 
@@ -161,4 +197,3 @@ Previously supported as [Hollie’s Hub for Good](https://www.digitalocean.com/c
 
 #### [My Health Connect Society](https://www.myhealthconnect.in)
 ![Logo_MyHealthConnect_v2](https://github.com/user-attachments/assets/6fc6df71-682c-4efe-b1b1-cc21811ec250)
-
