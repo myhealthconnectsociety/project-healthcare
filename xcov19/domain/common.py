@@ -1,3 +1,7 @@
+import shutil
+
+move=shutil.move('/workspaces/project-healthcare/xcov19/domain/common.py',dst='/workspaces/project-healthcare/xcov19/app')
+
 """
 Common domain models reused across several API endpoints.
 """
