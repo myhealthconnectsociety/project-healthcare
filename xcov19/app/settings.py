@@ -1,3 +1,9 @@
+from dotenv import find_dotenv,load_dotenv
+import os
+
+fetch_dotenv=find_dotenv()
+load_dotenv(fetch_dotenv)
+
 """
 Application settings handled using Pydantic Settings management.
 
@@ -49,4 +55,4 @@ def load_settings() -> Settings:
 
 class FromOriginMatchHeader(FromHeader[str]):
     name = "X-Origin-Match-Header"
-    secret = "secret"
+    secret = os.getenv('string')
