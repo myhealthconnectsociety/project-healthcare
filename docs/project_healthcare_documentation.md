@@ -52,7 +52,7 @@ To run **Project Healthcare**, you need to configure a `.env` file to store sens
 This is the structure of the `.env.example` file provided in the project:
 ```plaintext
 SECRET_KEY=
-
+```
 ### Libraries
 
 - `python = "^3.12"`
