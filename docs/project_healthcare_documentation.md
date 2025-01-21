@@ -26,6 +26,33 @@ Built on the **BlackSheep** framework, it adheres to domain-driven design and us
 - **Docker**
 - **Poetry**
 
+
+#### Environment Variables
+
+To run **Project Healthcare**, you need to configure a `.env` file to store sensitive information like the `SECRET_KEY`. This file should not be committed to version control for security reasons.
+
+##### Steps to Configure Environment Variables
+
+1. **Create a `.env` File**  
+   - Use the provided `.env.example` file as a template.
+   
+   - Copy `.env.example` to `.env` in the root directory of the project:
+     ```bash
+     cp .env.example .env
+     ```
+
+2. **Set the `SECRET_KEY`**  
+   - In the `.env` file, replace the placeholder with your actual secret key:
+     ```plaintext
+     SECRET_KEY=your-secret-key-here
+     ```
+
+##### Example `.env.example` File
+
+This is the structure of the `.env.example` file provided in the project:
+```plaintext
+SECRET_KEY=
+
 ### Libraries
 
 - `python = "^3.12"`
@@ -93,9 +120,14 @@ Built on the **BlackSheep** framework, it adheres to domain-driven design and us
 3. [Understanding OpenAPI](https://www.youtube.com/watch?v=6kwmW_p_Tig)
 
 ### Installation Steps:
-1. Clone the repository
-2. Install dependencies
-3. Run the app
+
+1. Clone the repository.
+2. Create and configure the `.env` file.
+   - Use the provided `.env.example` file as a template.
+   - Add the `SECRET_KEY` value as described in the **Environment Variables** section.
+3. Install dependencies.
+4. Run the app.
+
 
 Link to the [README.md](https://github.com/Khan-Ramsha/project-healthcare/blob/readme/README.md)
 
