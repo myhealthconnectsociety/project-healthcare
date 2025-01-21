@@ -43,8 +43,9 @@ To run **Project Healthcare**, you need to configure a `.env` file to store sens
 
 2. **Set the `SECRET_KEY`**  
    - In the `.env` file, replace the placeholder with your actual secret key:
+     
      ```plaintext
-     SECRET_KEY=your-secret-key-here
+      SECRET_KEY=your-secret-key-here
      ```
 
 ##### Example `.env.example` File
