@@ -27,7 +27,7 @@ Built on the **BlackSheep** framework, it adheres to domain-driven design and us
 - **Poetry**
 
 ### Libraries
-Use a virtual environment setup create using these commands in terminal:
+Use a virtual environment setup created using these commands in terminal:
 ```
 python -m venv <virtual_environment_name>
 <virtual_environment_name>\Scripts\activate
