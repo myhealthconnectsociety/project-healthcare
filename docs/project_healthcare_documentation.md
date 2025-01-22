@@ -43,7 +43,7 @@ It means your virtual environment has been created and now install all the depen
 pip install -r requirements.txt
 ```
 
-This will add all the dependencies to your virtual environment and now you are good to go with all the technical dependecies.
+This will add all the dependencies to your virtual environment and now you are good to go with all the technical dependencies.
 
 
 ### Tools
