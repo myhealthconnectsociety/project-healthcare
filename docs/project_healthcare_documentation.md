@@ -27,21 +27,24 @@ Built on the **BlackSheep** framework, it adheres to domain-driven design and us
 - **Poetry**
 
 ### Libraries
+Use a virtual environment setup create using these commands in terminal:
+```
+python -m venv <virtual_environment_name>
+<virtual_environment_name>\Scripts\activate
 
-- `python = "^3.12"`
-- `pydantic = "^2.9.1"`
-- `blacksheep = "^2.0.7"`
-- `Hypercorn = "^0.17.3"`
-- `MarkupSafe = "^2.1.3"`
-- `uvloop = {version = "^0.20.0", markers = "sys_platform != 'win32'"} `
-- `pydantic-settings = {version = "^2.3.4", markers = "sys_platform != 'win32'"} `
-- `cython = "^3.0.11"`
-- `sqlalchemy = {version="^2.0.34", markers = "sys_platform != 'win32'", extras = ["asyncio"]}`
-- `alembic = "^1.13.2"`
-- `aiosqlite = "^0.20.0"`
-- `sqlmodel = {version="^0.0.22"}`
-- `rich = {version = "^13.8.0"}`
-- `spatialite = "^0.0.3"`
+
+```
+If this shows (<virtual_environment_name>) before the location like:
+```
+(<virtual_environment_name>)C:\\folder_destination
+```
+It means your virtual environment has been created and now install all the dependencies:
+```
+pip install -r requirements.txt
+```
+
+This will add all the dependencies to your virtual environment and now you are good to go with all the technical dependecies.
+
 
 ### Tools
 
