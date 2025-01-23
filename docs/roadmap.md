@@ -96,7 +96,7 @@
    - Connect GraphQL resolvers to domain interfaces:
      - `enqueueDiagnosisQuery` -> `IPatientStore.enqueue_diagnosis_query`.
      - `enqueueGeolocationQuery` -> `IPatientStore.enqueue_geolocation_query`.
-     - `fetchProvidersByAddress` -> `IProviderRepository.fetch_by_providers`.
+     - `fetchProvidersByAddress` -> `IProviderRepository.fetch_providers_by_address`.
      - `fetchProvidersByQuery` -> `IProviderRepository.fetch_by_query`.
 
 2. **Database Integration**:
@@ -193,10 +193,11 @@
 2. **Authentication and Role-Based Access Control (RBAC)**:
    - **Supabase JWT Verification**:
      ```python
+     import os
      import jwt
 
      def verify_token(token):
-         secret = "supabase_secret"
+         secret = os.getenv("supabase_secret")
          try:
              payload = jwt.decode(token, secret, algorithms=["HS256"])
              return payload
@@ -208,12 +209,35 @@
    ```python
    import asyncio
    from strawberry.subscriptions import GraphQLWSHandler
+   from typing import Dict, AsyncGenerator
+   from collections import defaultdict
 
-   async def query_status_updated(query_id: str):
+   # Global dict to store queues for each query  
+   _status_queues: Dict[str, asyncio.Queue] = defaultdict(asyncio.Queue)
+
+  async def flush_query_queues():
+    for queue in _status_queues:
+      is_empty = False
+      try:  
+        if queue.empty():
+          queue.task_done()
+      except ValueError:
+        del _status_queues[query_id]  
+
+  async def query_status_updated(query_id: str) -> AsyncGenerator[dict, None]:
+      queue = _status_queues[query_id]
+      
        while True:
-           await asyncio.sleep(1)
-           yield {"status": "Processing", "queryId": query_id}
+           status_update = await queue.get()
+           yield status_update
+           queue.task_done()
 
+  async def publish_status_update(query_id: str, status: str):  
+    """Helper function to publish status updates"""  
+    if query_id in _status_queues:  
+        await _status_queues[query_id].put({"status": status, "queryId": query_id})
+  
+  
    @strawberry.type
    class Subscription:
        @strawberry.subscription
