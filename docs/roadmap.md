@@ -1,6 +1,20 @@
 ﻿
 # GraphQL-Driven Backend Roadmap
 
+## Sequence diagram for diagnosis query flow
+
+<img src="images/seq-diagram.svg" alt="Class-Diagram" width="900" />
+
+## Class diagram for core backend components
+
+<img src="images/class-diagram.svg" alt="Class-Diagram" width="900" />
+
+
+## Flow diagram for backend development phases
+
+<img src="images/graph.svg" alt="Diagram" width="600" />
+
+
 ## Phase 1: Core API with GraphQL Queries and Mocked Resolvers
 
 ### Tasks
@@ -237,7 +251,7 @@
     if query_id in _status_queues:  
         await _status_queues[query_id].put({"status": status, "queryId": query_id})
   
-  
+
    @strawberry.type
    class Subscription:
        @strawberry.subscription
