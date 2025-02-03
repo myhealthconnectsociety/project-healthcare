@@ -22,6 +22,10 @@ aiosqlite = "^0.20.0"
 sqlmodel = {version="^0.0.22"}
 rich = {version = "^13.8.0"}
 spatialite = "^0.0.3"
+strawberry-graphql = {version="^0.258.0", extras=[
+    "debug-server",
+    "asgi"
+    ]}
 
 ruff = { version = "^0.9.1", optional = true }
 mypy = { version = "^1.11.2", optional = true }
