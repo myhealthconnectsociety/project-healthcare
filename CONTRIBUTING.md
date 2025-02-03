@@ -35,6 +35,12 @@ Run this command to use Poetry for installing all necessary tools and libraries 
 Use this command to set up automatic checks that will help catch errors in your code before you commit it:
 
 `pre-commit install`
+
+#### Quickly test GraphQL application
+
+```bash
+hypercorn -b "127.0.0.1:5000" --debug -k uvloop --reload  xcov19.app.graphql.resolvers:gql_app
+```
  
 ### - Configure Your Editor (Optional):
 
