@@ -2,13 +2,32 @@ from typing import List
 import strawberry
 from xcov19.app.graphql.schema import (
     AddressType,
-    DiagnosisQueryType,
     FacilitiesResultType,
     GeoLocationType,
     PatientType,
-    QueryIDType,
 )
-from strawberry.asgi import GraphQL
+from xcov19.services.diagnosis import DiagnosisQueryService
+
+# TODO: Impl DiagnoseService
+# Enqueue diagnosis
+# fetch splty of diagnosis via external API
+# filter by splty the rows with query_id in aux table
+# async save this result to diagnosis table
+# return result
+
+# TODO: Implement Geolocation application service GeoLocationService
+# Service should Enqueue request, filter matching rows by geolocation,
+#   store in a temp row in aux sheet/table.
+# dummy impl
+
+
+@strawberry.type
+class Mutation:
+    @strawberry.mutation
+    async def enqueue_diagnosis_query(self, query: str) -> None:
+        response = DiagnosisQueryService.enqueue_diagnosis_query(query)
+        # TODO: log all print stmts
+        print(f"queue id is {await response}")
 
 
 @strawberry.type
@@ -23,13 +42,7 @@ class Query:
         ]
     )
 
-    diagnosis: DiagnosisQueryType = strawberry.field(
-        resolver=lambda: DiagnosisQueryType(
-            query="What is the reason for gravity i feel.",
-            query_id=QueryIDType(query_id="somethignASCII"),
-        )
-    )
-
+    # TODO: fetch_facilities_by_address
     facilities: FacilitiesResultType = strawberry.field(
         resolver=lambda: FacilitiesResultType(
             name="A place to dine",
@@ -52,8 +65,3 @@ class Query:
             estimated_time=1.08,
         )
     )
-
-
-schema = strawberry.Schema(query=Query)
-
-gql_app = GraphQL(schema, graphiql=True)
