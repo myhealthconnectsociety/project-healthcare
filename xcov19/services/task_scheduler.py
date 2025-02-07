@@ -49,10 +49,7 @@ class TaskScheduler:
         self.__loop = asyncio.get_running_loop()
         # Set a custom task factory to run coroutines eagerly
         self.__loop.set_task_factory(asyncio.eager_task_factory)
-        # Run the _run_task coroutine in a separate thread to avoid blocking
-        # asyncio.run_coroutine_threadsafe(self._run_task(), self.__loop)
         await self._run_task()
-        print("TaskScheduler: Waiting for tasks to be added..")
 
     async def _run_task(self) -> None:
         """Executes scheduled tasks.
