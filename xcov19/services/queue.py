@@ -57,7 +57,9 @@ class ThreadSafeQueue(QueueServiceInterface[DiagnosisQueryTuple]):
         return None
 
     def get(self) -> DiagnosisQueryTuple:
-        return self.__queue.get()
+        item = self.__queue.get()
+        self.__queue.task_done()
+        return item
 
     def put(self, item: DiagnosisQueryTuple) -> None:
         try:
@@ -73,7 +75,7 @@ class ThreadSafeQueue(QueueServiceInterface[DiagnosisQueryTuple]):
         return self.__queue.full()
 
     async def clear(self) -> None:
-        print("emptying queue of queries.")
+        print(f"emptying queue of queries size {self.__queue.qsize()}")
         while not self.is_empty():
             await self.dequeue()
 
