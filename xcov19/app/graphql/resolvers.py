@@ -1,12 +1,13 @@
-from typing import List
+from xcov19.app.graphql.inputs import GeoLocationInput
 import strawberry
 from xcov19.app.graphql.schema import (
     AddressType,
     FacilitiesResultType,
     GeoLocationType,
-    PatientType,
 )
 from xcov19.services.diagnosis import DiagnosisQueryService
+from xcov19.services.geolocation import GeolocationQueryService
+
 
 # TODO: Impl DiagnoseService
 # Enqueue diagnosis
@@ -24,25 +25,34 @@ from xcov19.services.diagnosis import DiagnosisQueryService
 @strawberry.type
 class Mutation:
     @strawberry.mutation
-    async def enqueue_diagnosis_query(self, query: str) -> None:
-        response = DiagnosisQueryService.enqueue_diagnosis_query(query)
+    async def enqueue_diagnosis_query(self, query: str) -> str:
+        query_id = await DiagnosisQueryService.enqueue_diagnosis_query(query)
         # TODO: log all print stmts
-        print(f"queue id is {await response}")
+        print(f"query id is {query_id}")
+        return query_id
+
+    @strawberry.mutation
+    async def store_query_geolocation(
+        self, query_id: str, geolocation: GeoLocationInput
+    ) -> None:
+        lat, lng = getattr(geolocation, "lat"), getattr(geolocation, "lng")
+        await GeolocationQueryService.store_location_query(
+            query_id=query_id, geolocation=(lat, lng)
+        )
 
 
 @strawberry.type
 class Query:
-    patients: List[PatientType] = strawberry.field(
-        resolver=lambda: [
-            PatientType(
-                cust_id="SomeId",
-                query="Find nearest facility. I got the moves",
-                geo_location=(108, 108),
-            )
-        ]
-    )
+    # TODO:
+    # 1. Implement async def get_patient
+    # 2. Permissions classes
+    # patient: PatientType = strawberry.field(
+    #     resolver=get_patient,
+    #     description="Fetch patient details."
+    #     # permission_classes=
+    #     )
 
-    # TODO: fetch_facilities_by_address
+    # TODO: Use GeolocationQueryService.fetch_facilities
     facilities: FacilitiesResultType = strawberry.field(
         resolver=lambda: FacilitiesResultType(
             name="A place to dine",

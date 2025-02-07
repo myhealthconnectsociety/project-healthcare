@@ -1,9 +1,6 @@
-import queue
 from typing import Any, Coroutine
 import concurrent.futures as futures
 import asyncio
-import sched
-import time
 from typing import Callable, List, Tuple
 
 AsyncFunctionT = Callable[..., Coroutine]
@@ -26,11 +23,11 @@ class TaskScheduler:
         # Event loop for running asynchronous tasks
         self.__loop: asyncio.AbstractEventLoop | None = None
         # Thread-safe queue for storing tasks to be executed
-        self._queue = queue.Queue(maxsize=maxsize)
+        self._queue = asyncio.Queue(maxsize=maxsize)
         # List to store tasks as tuples of (callback, args, kwargs)
         self.__tasks: List[CallableTupleT] = []
 
-    def add_task_on_startup(
+    async def add_task_on_startup(
         self, callback: Callable | AsyncFunctionT | None = None, *args, **kwargs
     ) -> None:
         """Adds tasks to be run on startup.
@@ -53,7 +50,8 @@ class TaskScheduler:
         # Set a custom task factory to run coroutines eagerly
         self.__loop.set_task_factory(asyncio.eager_task_factory)
         # Run the _run_task coroutine in a separate thread to avoid blocking
-        asyncio.run_coroutine_threadsafe(self._run_task(), self.__loop)
+        # asyncio.run_coroutine_threadsafe(self._run_task(), self.__loop)
+        await self._run_task()
         print("TaskScheduler: Waiting for tasks to be added..")
 
     async def _run_task(self) -> None:
@@ -65,7 +63,7 @@ class TaskScheduler:
         awaitable_tasks = []
         # Continuously fetch tasks from the queue
         while True:
-            item = self._queue.get()
+            item = await self._queue.get()
             self._queue.task_done()
             if not item:
                 break
@@ -73,7 +71,7 @@ class TaskScheduler:
             self.__tasks += [item]
 
         # Wait for all tasks in the queue to be processed
-        self._queue.join()
+        await self._queue.join()
         print("TaskScheduler: all tasks added. running..")
 
         # Execute tasks from the internal list
@@ -113,5 +111,12 @@ class TaskScheduler:
         print("TaskScheduler: shutdown")
 
 
-scheduler = sched.scheduler(timefunc=time.time, delayfunc=time.sleep)
 task_scheduler = TaskScheduler()
+
+
+async def start_task_scheduler() -> None:
+    asyncio.create_task(task_scheduler.run())
+
+
+def stop_task_scheduler() -> None:
+    task_scheduler.on_shutdown()
