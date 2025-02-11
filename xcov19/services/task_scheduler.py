@@ -1,10 +1,9 @@
-from typing import Any, Coroutine
+from collections.abc import Awaitable
+from typing import Dict
 import concurrent.futures as futures
 import asyncio
-from typing import Callable, List, Tuple
-
-AsyncFunctionT = Callable[..., Coroutine]
-CallableTupleT = Tuple[Callable | AsyncFunctionT, Any, Any]
+from typing import List
+from xcov19.services.event_registry import EventService
 
 
 # TODO: change prints to logs agnostic to backend logger
@@ -14,7 +13,7 @@ class TaskScheduler:
     executing scheduled tasks.
     """
 
-    def __init__(self, maxsize=0) -> None:
+    def __init__(self, /, event_handlers: Dict[str, EventService], maxsize=0) -> None:
         """
         Initializes the TaskScheduler.
         """
@@ -24,24 +23,22 @@ class TaskScheduler:
         self.__loop: asyncio.AbstractEventLoop | None = None
         # Thread-safe queue for storing tasks to be executed
         self._queue = asyncio.Queue(maxsize=maxsize)
-        # List to store tasks as tuples of (callback, args, kwargs)
-        self.__tasks: List[CallableTupleT] = []
+        # List to store tasks (callback, args, kwargs) to be executed.
+        self.__tasks: List[Awaitable] = []
+        self.__event_handlers = event_handlers
+        self._is_running = True
 
-    async def add_task_on_startup(
-        self, callback: Callable | AsyncFunctionT | None = None, *args, **kwargs
-    ) -> None:
+    def add_task(self, event_name: str, *args, **kwargs) -> None:
         """Adds tasks to be run on startup.
 
-        :param callback: The function or coroutine to be executed.
+        :param str: The event to be executed.
         :param args: Positional arguments to pass to the callback.
         :param kwargs: Keyword arguments to pass to the callback.
         """
-        # Add the task to the queue for later execution
-        if callback:
-            self._queue.put_nowait((callback, args, kwargs))
-        else:
-            self._queue.put_nowait(callback)
-        print("TaskScheduler: Task added.")
+        # Add the task to the queue for later execution as per queue.
+        event_service: EventService = self.__event_handlers["event_name"]
+        self._queue.put_nowait((event_service.callback, args, kwargs))
+        print(f"TaskScheduler: Task added {event_name}.")
 
     async def run(self) -> None:
         """Starts task scheduler in a non-blocking loop."""
@@ -49,71 +46,55 @@ class TaskScheduler:
         self.__loop = asyncio.get_running_loop()
         # Set a custom task factory to run coroutines eagerly
         self.__loop.set_task_factory(asyncio.eager_task_factory)
-        await self._run_task()
+        asyncio.run_coroutine_threadsafe(self._run(), self.__loop)
+        asyncio.run_coroutine_threadsafe(self._execute_tasks(), self.__loop)
 
-    async def _run_task(self) -> None:
+    async def _execute_tasks(self) -> None:
+        while self._is_running:
+            if self.__tasks:
+                print("TaskScheduler: Running background tasks")
+                # Run all tasks concurrently and wait for them to complete
+                await asyncio.gather(*self.__tasks)
+                self.__tasks.clear()
+
+    async def _run(self) -> None:
         """Executes scheduled tasks.
 
         Determines if they are coroutines or synchronous
         and running them accordingly.
         """
-        awaitable_tasks = []
-        # Continuously fetch tasks from the queue
-        while True:
-            item = await self._queue.get()
+        assert self.__loop
+        while item := await self._queue.get():
+            # TODO: Upon failure, add back to queue.
+            # task_done only when successful. Could be retry logic.
             self._queue.task_done()
-            if not item:
-                break
-            # Add the task to the internal list for execution
-            self.__tasks += [item]
-
-        # Wait for all tasks in the queue to be processed
-        await self._queue.join()
-        print("TaskScheduler: all tasks added. running..")
-
-        # Execute tasks from the internal list
-        while self.__tasks and self.__loop:
-            for callback, args, kwargs in self.__tasks:
-                if asyncio.iscoroutinefunction(callback):
-                    # Schedule coroutine tasks on the event loop
-                    awaitable_tasks += [
-                        self.__loop.create_task(callback(*args, **kwargs))
-                    ]
-                else:
-                    # Use ThreadPoolExecutor for synchronous tasks
-                    self.__thread_exc = futures.ThreadPoolExecutor()
-                    awaitable_tasks += [
-                        self.__loop.run_in_executor(
-                            self.__thread_exc, lambda: callback(*args, **kwargs)
-                        )
-                    ]
-            print("TaskScheduler: Running background tasks")
-            # Run all tasks concurrently and wait for them to complete
-            await asyncio.gather(*awaitable_tasks)
-            # Sleep for a while before checking for new tasks
-            await asyncio.sleep(5)
-            # Clear the list of awaitable tasks
-            awaitable_tasks.clear()
+            callback, args, kwargs = item
+            # Continuously fetch tasks from the queue
+            if asyncio.iscoroutinefunction(callback):
+                # Schedule coroutine tasks on the event loop
+                task: asyncio.Task = self.__loop.create_task(callback(*args, **kwargs))
+                self.__tasks += [task]
+            else:
+                # Use ThreadPoolExecutor for synchronous tasks
+                self.__thread_exc = futures.ThreadPoolExecutor()
+                self.__tasks += [
+                    self.__loop.run_in_executor(
+                        self.__thread_exc, lambda: callback(*args, **kwargs)
+                    )
+                ]
+            print("TaskScheduler: Added callback from queue to task.")
+        self._queue.task_done()
 
     def on_shutdown(self) -> None:
         """
         Shuts down the task scheduler, cancelling any remaining tasks.
         """
         # Clear the list of tasks
+        self._queue.put_nowait(None)
+        self._running = False
         self.__tasks.clear()
         if self.__thread_exc:
             print("TaskScheduler: shutting down thread")
             # Shutdown the ThreadPoolExecutor
             self.__thread_exc.shutdown(cancel_futures=True)
         print("TaskScheduler: shutdown")
-
-
-task_scheduler = TaskScheduler()
-
-
-async def start_task_scheduler() -> None:
-    asyncio.create_task(task_scheduler.run())
-
-
-def stop_task_scheduler() -> None:
-    task_scheduler.on_shutdown()
