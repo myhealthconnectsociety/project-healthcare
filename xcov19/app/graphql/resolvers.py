@@ -5,7 +5,7 @@ from xcov19.app.graphql.schema import (
     FacilitiesResultType,
     GeoLocationType,
 )
-from xcov19.services.diagnosis import DiagnosisQueryService
+from xcov19.services.diagnosis import enqueue_diagnosis
 from xcov19.services.geolocation import GeolocationQueryService
 
 
@@ -26,7 +26,7 @@ from xcov19.services.geolocation import GeolocationQueryService
 class Mutation:
     @strawberry.mutation
     async def enqueue_diagnosis_query(self, query: str) -> str:
-        query_id = await DiagnosisQueryService.enqueue_diagnosis_query(query)
+        query_id = await enqueue_diagnosis(query)
         # TODO: log all print stmts
         print(f"query id is {query_id}")
         return query_id

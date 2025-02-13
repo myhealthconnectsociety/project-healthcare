@@ -1,10 +1,13 @@
-[tool.poetry]
+[project]
 name = "xcov19"
 version = "0.1.0"
 description = "api backend for mhc UI"
-authors = ["codecakes <akulmat@protonmail.com>"]
+authors = [
+    { name = "codecakes", email = "akulmat@protonmail.com" }
+]
 readme = "README.md"
-package-mode = true
+# requires-python = "^3.12"
+dynamic = [ "dependencies" ]
 
 
 [tool.poetry.dependencies]
@@ -26,6 +29,9 @@ strawberry-graphql = {version="^0.258.0", extras=[
     "debug-server",
     "asgi"
     ]}
+protobuf = "*"
+grpcio = "*"
+grpcio-tools = "*"
 
 ruff = { version = "^0.9.1", optional = true }
 mypy = { version = "^1.11.2", optional = true }
@@ -37,10 +43,16 @@ anyio = { version = "^4.4.0", optional = true }
 black = { version = "^24.8.0", optional = true }
 pytest = { version = "^8.2.2", markers = "platform_python_implementation == 'CPython'", optional = true }
 
+[project.scripts]
+run_scheduler = "xcov19.infra.start_scheduler_service:main"
+
 [tool.poetry.extras]
 commit = ["pre-commit"]
 test = ["pytest", "pytest-asyncio", "anyio"]
 dev = ["ruff", "mypy", "blacksheep-cli", "rich", "pyright", "pre-commit", "pytest", "pytest-asyncio", "anyio", "black"]
+
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.8"
 
 [tool.pytest.ini_options]
 addopts = "-ra -q"
@@ -87,6 +99,7 @@ extraPaths = [
     "./xcov19/tests/"
 ]
 
+
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
