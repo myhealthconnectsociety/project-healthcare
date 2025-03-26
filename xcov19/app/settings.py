@@ -12,6 +12,9 @@ from blacksheep import FromHeader
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+load_dotenv()
+SECRET = os.getenv("SECRET_KEY")
+
 
 class APIInfo(BaseModel):
     title: str = "xcov19 API"
@@ -49,4 +52,4 @@ def load_settings() -> Settings:
 
 class FromOriginMatchHeader(FromHeader[str]):
     name = "X-Origin-Match-Header"
-    secret = "secret"
+    secret = SECRET
