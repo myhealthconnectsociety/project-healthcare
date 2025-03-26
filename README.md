@@ -89,11 +89,13 @@ Unlike other platforms, HIS combines advanced features in one solution, deliveri
 - [Docker](https://www.docker.com/)
 
 ## Installation Steps
-#### For Windows User:
+#### For Windows Users:
 -  Install [WSL](https://learn.microsoft.com/en-us/windows/wsl/install)  (Windows Subsystem for Linux)
 - Install Ubuntu (or a preferred distribution)
-- After setting up WSL,the remaining steps are the same as for Linux/Mac users.
-#### For Linux and Mac User:
+- After setting up WSL, the remaining steps are the same as for Linux/Mac users.
+
+#### For Linux and Mac Users:
+
 ##### 1) Once you have WSL running with Ubuntu, run `sudo apt install make` in ubuntu terminal
 ##### 2) Install Poetry: `curl -sSL https://install.python-poetry.org | python3 - `
 ##### 3) Clone the Project by running: `git clone https://github.com/Xcov19/project-healthcare/` `cd project-healthcare`

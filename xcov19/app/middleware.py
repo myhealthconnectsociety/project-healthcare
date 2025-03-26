@@ -3,8 +3,8 @@ from typing import Callable, Awaitable
 from blacksheep import Application, Request, Response, bad_request
 
 from xcov19.app.settings import FromOriginMatchHeader
+import os
 
-load_dotenv()
 SECRET = os.getenv("SECRET_KEY")
 
 def configure_middleware(app: Application, *middlewares):

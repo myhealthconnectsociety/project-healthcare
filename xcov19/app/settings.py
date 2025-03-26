@@ -11,8 +11,8 @@ from typing import Annotated
 from blacksheep import FromHeader
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+import os 
 
-load_dotenv()
 SECRET = os.getenv("SECRET_KEY")
 
 
