@@ -18,6 +18,14 @@ from xcov19.app.services import configure_services
 from xcov19.app.settings import load_settings, Settings
 
 from sqlalchemy.ext.asyncio import AsyncEngine
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+if SECRET_KEY is None:
+    raise RuntimeError("SECRET_KEY environment variable must be set.")
 
 
 def configure_application(

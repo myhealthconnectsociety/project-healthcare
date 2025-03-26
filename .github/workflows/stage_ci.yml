@@ -15,30 +15,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}  
 
-    - name: Set up Python
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.12'
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.12'
 
-    - name: Run Composite Action to Install Packages
-      uses: ./.github/actions
+      - name: Run Composite Action to Install Packages
+        uses: ./.github/actions
 
-    - name: Run Trivy Composite Action
-      uses: ./.github/actions/trivys
-      with:
+      - name: Run Trivy Composite Action
+        uses: ./.github/actions/trivys
+        with:
           TRIVYS_SECRET: ${{ secrets.TRIVYS }}
           TRIVYS_PAT: ${{ secrets.trivys-pat2 }}
 
-    - name: Run tests
-      run: make test
+      - name: Run tests
+        run: make test
 
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}  
+
       - uses: actions/setup-python@v3
 
       - name: Run Composite Action to Install Packages
