@@ -75,17 +75,19 @@ class InterfaceProtocolCheckMixin:
 
         # For methods that exist in both, check their signatures
         for defined_method in cls_methods & parent_methods:
-            cls_method = getattr(parent_class, defined_method)
+            parent_method = getattr(parent_class, defined_method)
             subclass_method = getattr(cls, defined_method)
-            cls_method_params: dict = get_type_hints(cls_method)
+            parent_method_params: dict = get_type_hints(parent_method)
             subclass_method_params: dict = get_type_hints(subclass_method)
-            if len(cls_method_params) != len(subclass_method_params):
-                raise NotImplementedError(f"""Method parameters mismatch:
-                Expected: {cls_method_params.keys()}
+            if len(parent_method_params) != len(subclass_method_params):
+                raise NotImplementedError(
+                    f"""Method parameters mismatch:
+                Expected: {parent_method_params.keys()}
                 Got: {subclass_method_params.keys()}
-                """)
-            for cls_signature, subclass_signature in zip(
-                cls_method_params.items(), subclass_method_params.items()
+                """
+                )
+            for parent_signature, subclass_signature in zip(
+                parent_method_params.items(), subclass_method_params.items()
             ):
-                match_signature(cls_signature, subclass_signature)
+                match_signature(parent_signature, subclass_signature)
         super().__init_subclass__(**kwargs)
