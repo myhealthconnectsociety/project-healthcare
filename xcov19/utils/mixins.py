@@ -46,13 +46,35 @@ class InterfaceProtocolCheckMixin:
 
     def __init_subclass__(cls, **kwargs):
         parent_class = inspect.getmro(cls)[1]
-        # raise Exception(inspect.getmembers(cls, predicate=inspect.isfunction))
-        for defined_method in (
-            method_name
-            for method_name, _ in inspect.getmembers(cls, predicate=inspect.ismethod)
-            if not method_name.startswith("__")
-        ):
-            # TODO: Raise if either classes don't have the method declared.
+
+        # Get all callable attributes from parent class that aren't dunder methods
+        parent_methods = set()
+        for name, attr in parent_class.__dict__.items():
+            if not name.startswith("__") and callable(attr):
+                parent_methods.add(name)
+
+        # Get all callable attributes from implementation class that aren't dunder methods
+        cls_methods = set()
+        for name, attr in cls.__dict__.items():
+            if not name.startswith("__") and callable(attr):
+                cls_methods.add(name)
+
+        # Check if implementation is missing methods from interface
+        missing_in_impl = parent_methods - cls_methods
+        if missing_in_impl:
+            raise NotImplementedError(
+                f"Implementation {cls.__name__} is missing methods declared in interface {parent_class.__name__}: {missing_in_impl}"
+            )
+
+        # Check if implementation has extra methods not declared in interface
+        extra_in_impl = cls_methods - parent_methods
+        if extra_in_impl:
+            raise NotImplementedError(
+                f"Implementation {cls.__name__} has methods not declared in interface {parent_class.__name__}: {extra_in_impl}"
+            )
+
+        # For methods that exist in both, check their signatures
+        for defined_method in cls_methods & parent_methods:
             cls_method = getattr(parent_class, defined_method)
             subclass_method = getattr(cls, defined_method)
             cls_method_params: dict = get_type_hints(cls_method)
