@@ -13,6 +13,10 @@ from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 import os
 
+# ✅ Centralized secret fetch (single source of truth)
+ORIGIN_MATCH_SECRET = os.getenv("FROM_ORIGIN_HEADER_SECRET", "default-dev-secret")
+
+
 class APIInfo(BaseModel):
     title: str = "xcov19 API"
     version: str = "0.0.1"
@@ -49,4 +53,3 @@ def load_settings() -> Settings:
 
 class FromOriginMatchHeader(FromHeader[str]):
     name = "X-Origin-Match-Header"
-    secret = os.getenv("FROM_ORIGIN_HEADER_SECRET", "default-dev-secret")
