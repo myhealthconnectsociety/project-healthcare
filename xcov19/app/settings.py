@@ -11,7 +11,7 @@ from typing import Annotated
 from blacksheep import FromHeader
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
+import os
 
 class APIInfo(BaseModel):
     title: str = "xcov19 API"
@@ -49,4 +49,4 @@ def load_settings() -> Settings:
 
 class FromOriginMatchHeader(FromHeader[str]):
     name = "X-Origin-Match-Header"
-    secret = "secret"
+    secret = os.getenv("FROM_ORIGIN_HEADER_SECRET", "default-dev-secret")

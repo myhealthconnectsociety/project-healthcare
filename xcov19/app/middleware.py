@@ -1,4 +1,5 @@
 from typing import Callable, Awaitable
+import os
 
 from blacksheep import Application, Request, Response, bad_request
 
@@ -12,12 +13,18 @@ def configure_middleware(app: Application, *middlewares):
 async def origin_header_middleware(
     request: Request, handler: Callable[[Request], Awaitable[Response]]
 ) -> Response:
-    if not FromOriginMatchHeader.name:
-        raise ValueError("FromOriginMatchHeader name is not set.")
+    # Allow open endpoints without validation
     if request.path.startswith("/docs") or request.path.startswith("/openapi"):
         return await handler(request)
-    match request.headers.get(FromOriginMatchHeader.name.encode()):
-        case (b"secret",):
-            return await handler(request)
-        case _:
-            return bad_request("Invalid origin match header value provided.")
+
+    # Get expected secret from environment
+    expected_secret = os.getenv("FROM_ORIGIN_HEADER_SECRET", "default-dev-secret").encode()
+
+    # Get actual header from request
+    actual_header = request.headers.get(FromOriginMatchHeader.name.encode())
+
+    # Compare
+    if actual_header == (expected_secret,):
+        return await handler(request)
+    else:
+        return bad_request("Invalid origin match header value provided.")
