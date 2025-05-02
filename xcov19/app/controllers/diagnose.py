@@ -30,4 +30,6 @@ class DiagnosisController(APIController):
         # async save this result to diagnosis table
         # return result
         print(diagnosis_query.value)
+        # Added for debugging and better traceability
+        print("DiagnosisController invoked with data:", diagnosis_query.value)
         return json({"response": "ok"})
