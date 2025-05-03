@@ -28,6 +28,7 @@ class Site(BaseModel):
 
 class Settings(BaseSettings):
     db_engine_url: Annotated[str, "database connection string"] = Field(default=...)
+    api_secret: Annotated[str, "api_secret"] = Field(default=...)
 
     # to override info:
     # export app_info='{"title": "x", "version": "0.0.2"}'
@@ -49,4 +50,3 @@ def load_settings() -> Settings:
 
 class FromOriginMatchHeader(FromHeader[str]):
     name = "X-Origin-Match-Header"
-    secret = "secret"
