@@ -5,7 +5,7 @@ check:
 	@bash check.sh
 
 run:
-	@bash run.sh
+	./run.sh
 
 install:
 	@bash install.sh
