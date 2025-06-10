@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 
+from typing import TypeAlias
 from xcov19.domain.models import GeoLocation
 
-type CustomerId = str
+CustomerId: TypeAlias = str
 
 # domain entities
 

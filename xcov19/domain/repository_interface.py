@@ -1,14 +1,14 @@
-from typing import Protocol, TypeVar, List
+from typing import Protocol, TypeVar, List, Generic
 import abc
 
 from xcov19.domain.models.patient import Patient
 from xcov19.domain.models.provider import Provider
 
 PatientT = TypeVar("PatientT", bound=Patient)
-ProviderT = TypeVar("ProviderT", bound=Patient)
+ProviderT = TypeVar("ProviderT", bound=Provider)
 
 
-class IPatientStore[PatientT: Patient](Protocol):
+class IPatientStore(Protocol, Generic[PatientT]):
     @classmethod
     @abc.abstractmethod
     def enqueue_diagnosis_query(cls, patient: PatientT):
@@ -20,7 +20,7 @@ class IPatientStore[PatientT: Patient](Protocol):
         raise NotImplementedError
 
 
-class IProviderRepository[ProviderT: Provider](Protocol):
+class IProviderRepository(Protocol, Generic[ProviderT]):
     @abc.abstractmethod
     def fetch_by_providers(self, **address: dict[str, str]) -> List[ProviderT]:
         raise NotImplementedError

@@ -1,8 +1,8 @@
-from typing import Tuple
+from typing import Tuple, TypeAlias
 
-type Mobile = str
-type Telephone = str
-type MobileTelephone = Mobile | Telephone
-type longitude = float
-type latitude = float
-type GeoLocation = Tuple[latitude, longitude]
+Mobile: TypeAlias = str
+Telephone: TypeAlias = str
+MobileTelephone: TypeAlias = Mobile | Telephone
+longitude: TypeAlias = float
+latitude: TypeAlias = float
+GeoLocation: TypeAlias = Tuple[latitude, longitude]
