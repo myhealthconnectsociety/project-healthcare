@@ -8,6 +8,7 @@ Refer to https://www.uvicorn.org/deployment/ for production deployments.
 import os
 import importlib
 import importlib.util as importlib_util
+from typing import Any, cast
 
 try:
     if importlib_util.find_spec("uvicorn", package="sys.modules"):
@@ -24,7 +25,7 @@ except ModuleNotFoundError:
 else:
     uvloop.install()
 
-from xcov19.app.main import app
+from xcov19.app.graphql.main import app
 
 
 if __name__ == "__main__":
@@ -49,4 +50,4 @@ if __name__ == "__main__":
 
         config.use_reloader = True
 
-        asyncio.run(serve(app, config))
+        asyncio.run(serve(cast(Any, app), config))

@@ -5,7 +5,7 @@ from blacksheep.testing import TestClient
 import pytest
 
 from blacksheep import Application
-from xcov19.dto import (
+from xcov19.app.dto import (
     AnonymousId,
     GeoLocation,
     LocationQueryJSON,

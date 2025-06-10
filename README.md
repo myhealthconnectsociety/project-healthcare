@@ -38,9 +38,14 @@ Project Healthcare, from hereon called the brokering service, is a set of upstre
 ## Extensible and Open
 
 Unlock advanced healthcare integration without the enterprise price tag. Connect systems, personalize care, and reach underserved communities with ease.
-Built using modified project template for [BlackSheep](https://github.com/Neoteroi/BlackSheep)
-web framework to start Web APIs, the project structure adheres blacksheep's domain and infrastructure segregation philosophy. It naturally fits the 
-domain driven design philosophy using ports and adapters pattern so expect slight shift towards domain models and services structure.
+This project exposes a **GraphQL** API that follows a domain driven design using ports and adapters.
+Run the server locally with:
+
+```bash
+hypercorn -b 127.0.0.1:5000 --reload xcov19.app.graphql.main:app
+```
+
+Navigate to [http://localhost:5000/graphql](http://localhost:5000/graphql) to access the interactive GraphiQL interface and start querying the API.
 
 The specification follows a sandwich service model i.e. it requires one or more upstream producer services and one downstream consumer service as follows:
 
