@@ -1,7 +1,7 @@
 import dataclasses
 import enum
 from dataclasses import dataclass
-from typing import Annotated, List
+from typing import Annotated, List, Generic, TypeVar, TypeAlias
 from xcov19.domain.models import MobileTelephone, GeoLocation
 
 
@@ -22,18 +22,21 @@ class FacilityOwnership(enum.StrEnum):
     CHARITY = "charity"
 
 
-type FacilityType = FacilityEstablishment
-type FacilityOwnerType = FacilityOwnership
-type ProviderName = str
-type Specialties = List[str]
-type Qualification = List[str]
-type PracticeExpYears = int | float
-type MoneyType = int | float
+FacilityType: TypeAlias = FacilityEstablishment
+FacilityOwnerType: TypeAlias = FacilityOwnership
+ProviderName: TypeAlias = str
+Specialties: TypeAlias = List[str]
+Qualification: TypeAlias = List[str]
+PracticeExpYears: TypeAlias = int | float
+MoneyType: TypeAlias = int | float
+
+
+T_Mobile = TypeVar("T_Mobile", bound=MobileTelephone)
 
 
 @dataclass
-class Contact[T: MobileTelephone]:
-    value: T
+class Contact(Generic[T_Mobile]):
+    value: T_Mobile
 
     def _valid_prefix(self) -> bool:
         return self.value[0] == "+" or ord("0") <= ord(self.value[0]) <= ord("9")

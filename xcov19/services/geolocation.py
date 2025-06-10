@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import abc
-from typing import TypeVar, Protocol, Callable, List
+from typing import TypeVar, Protocol, Callable, List, Generic
 
 from xcov19.dto import LocationQueryJSON, Address, FacilitiesResult
 from xcov19.utils.mixins import InterfaceProtocolCheckMixin
@@ -12,7 +12,7 @@ T = TypeVar("T", bound=LocationQueryJSON)
 # Application services
 
 
-class LocationQueryServiceInterface[T: LocationQueryJSON](Protocol):
+class LocationQueryServiceInterface(Protocol, Generic[T]):
     """Location aware service for listing faciltiies.
     1. Searches and fetches existing processed results by query_id for a cust_id
     2. Resolves coordinates from a given geolocation.
