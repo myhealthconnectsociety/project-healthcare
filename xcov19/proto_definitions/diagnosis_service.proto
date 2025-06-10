@@ -1,0 +1,13 @@
+   // diagnosis_service.proto
+   syntax = "proto3";
+
+   message DiagnosisQueryRequest {
+     string query_id = 1;
+     string query = 2;
+   }
+
+   message EmptyDiagnosisQueryResponse {}
+
+   service DiagnosisService {
+     rpc EnqueueDiagnosisQuery (DiagnosisQueryRequest) returns (EmptyDiagnosisQueryResponse);
+   }

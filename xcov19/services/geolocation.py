@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import abc
-from typing import TypeVar, Protocol, Callable, List
+from typing import Tuple, TypeVar, Protocol, Callable, List
 
-from xcov19.dto import LocationQueryJSON, Address, FacilitiesResult
+from xcov19.app.dto import LocationQueryJSON, Address, FacilitiesResult
 from xcov19.utils.mixins import InterfaceProtocolCheckMixin
 
 T = TypeVar("T", bound=LocationQueryJSON)
@@ -32,6 +32,13 @@ class LocationQueryServiceInterface[T: LocationQueryJSON](Protocol):
 
     @classmethod
     @abc.abstractmethod
+    async def store_location_query(
+        cls, query_id: str, geolocation: Tuple[float, float]
+    ) -> None:
+        raise NotImplementedError
+
+    @classmethod
+    @abc.abstractmethod
     async def fetch_facilities(
         cls,
         reverse_geo_lookup_svc: Callable[[T], dict],
@@ -52,6 +59,12 @@ class GeolocationQueryService(
     ) -> Address:
         """Resolves to address by geo reverse lookup."""
         return Address(**reverse_geo_lookup_svc(query))
+
+    @classmethod
+    async def store_location_query(
+        cls, query_id: str, geolocation: Tuple[float, float]
+    ) -> None:
+        print(f"query_id {query_id} with location {geolocation} stored")
 
     @classmethod
     async def fetch_facilities(

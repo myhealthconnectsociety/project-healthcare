@@ -18,7 +18,7 @@ from xcov19.services.geolocation import (
     LocationQueryServiceInterface,
     GeolocationQueryService,
 )
-from xcov19.dto import Address, LocationQueryJSON, FacilitiesResult, GeoLocation
+from xcov19.app.dto import Address, LocationQueryJSON, FacilitiesResult, GeoLocation
 
 
 from xcov19.utils.mixins import InterfaceProtocolCheckMixin

@@ -1,5 +1,4 @@
-﻿
-# GraphQL-Driven Backend Roadmap
+﻿# GraphQL-Driven Backend Roadmap
 
 ## Sequence diagram for diagnosis query flow
 
@@ -19,15 +18,11 @@
 
 ### Tasks
 1. **GraphQL Schema Design**:
-   - Define the following queries and mutations:
+   - Define the following queries:
      - **Queries**:
-       - `queueDiagnosisQuery(patientId: ID!): Boolean` - Initiates a diagnosis query for a patient.
-       - `queueGeolocationQuery(patientId: ID!): Boolean` - Initiates a geolocation query for a patient.
-       - `fetchProvidersByAddress(address: AddressInput!): [Provider]` - Retrieves providers matching an address.
-       - `fetchProvidersByQuery(queryId: ID!): [Provider]` - Retrieves providers linked to a specific query ID.
-     - **Mutations**:
-       - `enqueueDiagnosisQuery(patientId: ID!): String` - Queues a diagnosis query for processing and returns a tracking ID.
-       - `enqueueGeolocationQuery(patientId: ID!): String` - Queues a geolocation query for processing and returns a tracking ID.
+       - `patients: [PatientType]` - Retrieves a list of patients with mocked data.
+       - `diagnosis: DiagnosisQueryType` - Provides a mocked diagnosis query.
+       - `facilities: FacilitiesResultType` - Retrieves facilities with mocked data.
 
 2. **Resolvers with Mocked Data**:
    - Implement mocked resolvers for these queries and mutations.
@@ -42,12 +37,12 @@
 - **GraphQL Schema**:
   ```python
   import strawberry
+  from typing import List
 
   @strawberry.type
-  class Patient:
+  class Provider:
       id: str
       name: str
-      age: int
 
   @strawberry.type
   class Query:
@@ -56,8 +51,8 @@
           return True
 
       @strawberry.field
-      def fetch_providers_by_address(self, address: str) -> list[str]:
-          return ["Provider1", "Provider2"]
+      def fetch_providers_by_address(self, address: str) -> List[Provider]:
+          return [Provider(id="1", name="Provider1"), Provider(id="2", name="Provider2")]
 
   schema = strawberry.Schema(query=Query)
   ```
@@ -220,7 +215,8 @@
      ```
 
 3. **Subscriptions**:
-   ```python
+  
+  ```python
    import asyncio
    from strawberry.subscriptions import GraphQLWSHandler
    from typing import Dict, AsyncGenerator
@@ -310,5 +306,3 @@
 | **Phase 2**       | Fully integrated resolvers with domain logic and database connections.                             |
 | **Phase 3**       | Real-time subscriptions, advanced filters, recommendations, and secure endpoints.                 |
 | **Phase 4**       | Observability tools, CI/CD pipelines, and production-ready deployment.                            |
-
-
