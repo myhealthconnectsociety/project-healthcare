@@ -1,6 +1,6 @@
 import json
 import pytest
-from xcov19.dto import LocationQueryJSON, GeoLocation, AnonymousId, QueryId
+from xcov19.app.dto import LocationQueryJSON, GeoLocation, AnonymousId, QueryId
 from blacksheep import Content, Response
 
 
