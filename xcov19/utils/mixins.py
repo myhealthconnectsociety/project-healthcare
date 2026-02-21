@@ -38,32 +38,59 @@ def match_signature(
 
 
 class InterfaceProtocolCheckMixin:
-    """Checks for correct signature used by the implementation class.
-
-    Drop in mixin wherever an implementation is subclasses with an
-    interface definition.
-    """
-
     def __init_subclass__(cls, **kwargs):
-        parent_class = inspect.getmro(cls)[1]
-        # raise Exception(inspect.getmembers(cls, predicate=inspect.isfunction))
-        for defined_method in (
-            method_name
-            for method_name, _ in inspect.getmembers(cls, predicate=inspect.ismethod)
-            if not method_name.startswith("__")
-        ):
-            # TODO: Raise if either classes don't have the method declared.
-            cls_method = getattr(parent_class, defined_method)
-            subclass_method = getattr(cls, defined_method)
-            cls_method_params: dict = get_type_hints(cls_method)
-            subclass_method_params: dict = get_type_hints(subclass_method)
-            if len(cls_method_params) != len(subclass_method_params):
-                raise NotImplementedError(f"""Method parameters mismatch:
-                Expected: {cls_method_params.keys()}
-                Got: {subclass_method_params.keys()}
-                """)
-            for cls_signature, subclass_signature in zip(
-                cls_method_params.items(), subclass_method_params.items()
-            ):
-                match_signature(cls_signature, subclass_signature)
         super().__init_subclass__(**kwargs)
+
+        # Identify the interface class (exclude the mixin itself)
+        interfaces = [
+            base for base in cls.__bases__
+            if base is not InterfaceProtocolCheckMixin
+        ]
+
+        # If class does not implement an interface, skip checks
+        if not interfaces:
+            return
+
+        # Usually only one interface
+        interface = interfaces[0]
+
+        # Collect all callable methods in the interface (ignore dunders)
+        interface_methods = {
+            name: func
+            for name, func in interface.__dict__.items()
+            if callable(func) and not name.startswith("__")
+        }
+
+        # Collect all callable methods in the implementation (ignore dunders)
+        implementation_methods = {
+            name: func
+            for name, func in cls.__dict__.items()
+            if callable(func) and not name.startswith("__")
+        }
+
+        # 1. Interface method missing in implementation
+        for name, func in interface_methods.items():
+            if name not in implementation_methods:
+                raise NotImplementedError(
+                    f"Class '{cls.__name__}' must implement method '{name}' "
+                    f"declared in interface '{interface.__name__}'."
+                )
+
+            # Check method signatures
+            sig_interface = inspect.signature(func)
+            sig_impl = inspect.signature(implementation_methods[name])
+
+            if sig_interface != sig_impl:
+                raise NotImplementedError(
+                    f"Signature mismatch for method '{name}'. "
+                    f"Interface expects {sig_interface}, "
+                    f"but implementation has {sig_impl}."
+                )
+
+        # 2. Extra methods in implementation not in interface
+        for name in implementation_methods:
+            if name not in interface_methods:
+                raise NotImplementedError(
+                    f"Method '{name}' is defined in '{cls.__name__}' "
+                    f"but not declared in interface '{interface.__name__}'."
+                )
