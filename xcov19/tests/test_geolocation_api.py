@@ -28,10 +28,11 @@ class TestGeolocationAPI:
             },
         )
 
-        # The current implementation returns ok(), which is null in JSON
-        # response_text = await response.text()
-        # assert response_text.lower() == "resource not found"
-        # Assert the response
-        assert response.content_type() == b"text/plain; charset=utf-8"
-        # assert response.content == b''
+        # ok() returns an empty 200 response with no body and no Content-Type header.
+        # Assert all three to guard against regressions (per Sourcery AI suggestion).
+        # Note: BlackSheep ok() sets no body at all, so response.read() returns None.
+        # Note: BlackSheep headers use bytes keys (HTTP/2 normalized lowercase).
         assert response.status == 200
+        body = await response.read()
+        assert body is None
+        assert b"content-type" not in response.headers
