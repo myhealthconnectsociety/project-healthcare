@@ -1,10 +1,19 @@
+import os
+
+# Set test env vars BEFORE any app imports to prevent module-level validation failure
+# in xcov19/app/main.py which runs configure_application() at import time.
+os.environ.setdefault("APP_DB_ENGINE_URL", "sqlite+aiosqlite://")
+os.environ.setdefault("APP_ENV", "test")
+
 from collections.abc import Callable
-from typing import List
+from typing import AsyncGenerator, List
 
 from blacksheep.testing import TestClient
 import pytest
 
 from blacksheep import Application
+from xcov19.tests.start_server import start_server
+from xcov19.app.main import app
 from xcov19.dto import (
     AnonymousId,
     GeoLocation,
@@ -131,9 +140,8 @@ def stub_location_srvc() -> LocationQueryServiceInterface:
 
 
 @pytest.fixture(scope="function", name="client")
-async def test_client():
-    # Create a test client
-    async def start_client(app: Application) -> TestClient:
-        return TestClient(app)
-
-    return start_client
+async def test_client() -> AsyncGenerator[TestClient, None]:
+    # Use the real app singleton — all routes are registered via controller_router.
+    # env vars (APP_DB_ENGINE_URL etc.) are set at the top of this file before import.
+    async with start_server(app) as started_app:
+        yield TestClient(started_app)
